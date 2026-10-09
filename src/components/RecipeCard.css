@@ -1,0 +1,132 @@
+.recipe-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e9e5;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(32, 61, 39, 0.05);
+}
+
+.recipe-card-image {
+  min-height: 100px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  background: #eaf2e8;
+}
+
+.recipe-category {
+  padding: 6px 10px;
+  color: #2f6b45;
+  background: #fff;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.recipe-card-content {
+  padding: 18px;
+}
+
+.recipe-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.recipe-card-heading h3 {
+  margin: 0;
+  color: #263b2d;
+  font-size: 19px;
+}
+
+.recipe-compatibility {
+  flex-shrink: 0;
+  color: #2f6b45;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.recipe-description {
+  margin-top: 10px;
+  color: #68716a;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.recipe-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 16px;
+  color: #58645b;
+  font-size: 13px;
+}
+
+.recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.recipe-tag {
+  padding: 5px 9px;
+  color: #356347;
+  background: #edf5ed;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.recipe-ingredients {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #e8ece8;
+}
+
+.recipe-ingredients h4 {
+  margin: 0 0 10px;
+  color: #344b39;
+  font-size: 14px;
+}
+
+.recipe-ingredients ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recipe-ingredients li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #435047;
+  font-size: 13px;
+}
+
+.recipe-ingredients li > span {
+  color: #2f8050;
+  font-weight: 700;
+}
+
+.recipe-ingredients li.ingredient-missing > span {
+  color: #c47735;
+}
+
+.recipe-ingredients li small {
+  margin-left: auto;
+  color: #a4612d;
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  .recipe-card-content {
+    padding: 15px;
+  }
+
+  .recipe-card-heading h3 {
+    font-size: 17px;
+  }
+}
