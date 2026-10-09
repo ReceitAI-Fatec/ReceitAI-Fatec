@@ -1,121 +1,167 @@
+
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+
+import IngredientSelect from './components/IngredientSelect'
+import RecipeCard from './components/RecipeCard'
+import recipes from './assets/recipes'
+import RecipeFilters from './components/RecipeFilters'
+import AppNavigation from './components/AppNavigation'
+import RecipeDetails from './pages/RecipeDetails'
+import AppHeader from './components/AppHeader'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedIngredients, setSelectedIngredients] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [maxPreparationTime, setMaxPreparationTime] = useState('')
+  const [selectedDiets, setSelectedDiets] = useState([])
+  const [activeTab, setActiveTab] = useState('pantry')
+  const [selectedRecipe, setSelectedRecipe] = useState(null)
+
+  const availableIngredients = selectedIngredients.map(
+    (ingredient) => ingredient.label,
+  )
+
+  const recipesWithCompatibility = recipes.map((recipe) => {
+    const availableCount = recipe.ingredients.filter((ingredient) =>
+      availableIngredients.includes(ingredient),
+    ).length
+
+    const compatibility = Math.round(
+      (availableCount / recipe.ingredients.length) * 100,
+    )
+
+    const missingIngredients = recipe.ingredients.filter(
+      (ingredient) => !availableIngredients.includes(ingredient),
+    )
+
+    return {
+      ...recipe,
+      compatibility,
+      missingIngredients,
+    }
+  })
+
+  const filteredRecipes = recipesWithCompatibility.filter((recipe) => {
+    const matchesCategory =
+      !selectedCategory || recipe.category === selectedCategory
+
+    const matchesTime =
+      !maxPreparationTime ||
+      recipe.preparationTime <= Number(maxPreparationTime)
+
+    const matchesDiet = selectedDiets.every((diet) =>
+      recipe.dietaryTags.includes(diet),
+    )
+
+    return matchesCategory && matchesTime && matchesDiet
+  })
+
+  const sortedRecipes = [...filteredRecipes].sort(
+    (a, b) => b.compatibility - a.compatibility,
+  )
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <main className="app-container">
+      <AppHeader />
 
-      <div className="ticks"></div>
+      <AppNavigation
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab)
+          setSelectedRecipe(null)
+        }}
+      />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {selectedRecipe ? (
+        <RecipeDetails
+          recipe={selectedRecipe}
+          onBack={() => setSelectedRecipe(null)}
+        />
+      ) : (
+        <>
+          {activeTab === 'pantry' && (
+            <>
+              <section className="pantry-intro">
+                <span>SUA COZINHA COMEÇA AQUI</span>
+                <h2>O próximo prato já está na sua despensa.</h2>
+                <p>
+                  Selecione o que você tem e encontre receitas que combinam
+                  com a sua rotina.
+                </p>
+              </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+              <div className="pantry-layout">
+                <section className="search-section">
+                  <h2>O que você tem em casa?</h2>
+
+                  <p className="section-description">
+                    Adicione os ingredientes. Inclua também os básicos,
+                    como sal e azeite.
+                  </p>
+
+                  <IngredientSelect
+                    selectedIngredients={selectedIngredients}
+                    onChange={setSelectedIngredients}
+                  />
+
+                  <div className="selected-summary">
+                    {selectedIngredients.length === 0 ? (
+                      <p>
+                        Selecione ingredientes para descobrir suas receitas.
+                      </p>
+                    ) : (
+                      <p>
+                        Você selecionou {selectedIngredients.length}{' '}
+                        {selectedIngredients.length === 1
+                          ? 'ingrediente'
+                          : 'ingredientes'}.
+                      </p>
+                    )}
+                  </div>
+                </section>
+
+                <section className="pantry-filters">
+                  <RecipeFilters
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                    maxPreparationTime={maxPreparationTime}
+                    onPreparationTimeChange={setMaxPreparationTime}
+                    selectedDiets={selectedDiets}
+                    onDietChange={setSelectedDiets}
+                  />
+
+                  
+                </section>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'recommendations' && (
+            <section className="recipes-section">
+              <div className="recipes-heading">
+                <h2>Receitas para você</h2>
+                <p>
+                  {selectedIngredients.length === 0
+                    ? 'Explore nossas sugestões fictícias.'
+                    : 'Ordenadas pelas que combinam melhor com seus ingredientes.'}
+                </p>
+              </div>
+
+              <div className="recipes-grid">
+                {sortedRecipes.map((recipe) => (
+                  <RecipeCard
+                    key={recipe.id}
+                    recipe={recipe}
+                    onSelect={setSelectedRecipe}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
+    </main>
   )
 }
 
