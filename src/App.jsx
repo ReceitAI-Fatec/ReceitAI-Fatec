@@ -10,6 +10,18 @@ import RecipeDetails from './pages/RecipeDetails'
 import AppHeader from './components/AppHeader'
 import './App.css'
 
+
+// ********************BOTAO TESTE*******************************//
+
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import SaveIcon from '@mui/icons-material/Save';
+import SendIcon from '@mui/icons-material/Send';
+
+
 function App() {
   const [selectedIngredients, setSelectedIngredients] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -119,6 +131,16 @@ function App() {
                       </p>
                     )}
                   </div>
+
+                  {/* BOTÃO TESTE**********************/}
+                  <Button variant="contained" endIcon={<SendIcon />} onClick={() => setActiveTab('recommendations')} sx={{
+                    borderRadius: '10px', backgroundColor: '#2f6b45e3',
+                    '&:hover': { backgroundColor: '#2F6B45', transform: 'scale(1.05)' }
+                  }}>
+                    Enviar
+                  </Button>
+
+
                 </section>
 
                 <section className="pantry-filters">
@@ -131,7 +153,7 @@ function App() {
                     onDietChange={setSelectedDiets}
                   />
 
-                  
+
                 </section>
               </div>
             </>

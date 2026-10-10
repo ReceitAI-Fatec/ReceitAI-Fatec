@@ -1,10 +1,14 @@
 import './RecipeCard.css'
 
+// ************ TESTE ICONE *****************
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 function RecipeCard({ recipe, onSelect }) {
   return (
     <article
-        className="recipe-card"
-        onClick={() => onSelect(recipe)}
+      className="recipe-card"
+      onClick={() => onSelect(recipe)}
     >
       <div className="recipe-card-image">
         <span className="recipe-category">{recipe.category}</span>
@@ -45,17 +49,35 @@ function RecipeCard({ recipe, onSelect }) {
               )
 
               return (
+                // <li
+                //   key={ingredient}
+                //   className={isMissing ? 'ingredient-missing' : ''}
+                // >
+                //   <span aria-hidden="true">
+                //     {isMissing ? '○' : '✓'}
+                //   </span>
+                //   {ingredient}
+                //   {isMissing && (
+                //     <small>Faltando</small>
+                //   )}
+                // </li>
+
+                // ******TESTE ICONE*********
                 <li
                   key={ingredient}
                   className={isMissing ? 'ingredient-missing' : ''}
                 >
                   <span aria-hidden="true">
-                    {isMissing ? '○' : '✓'}
+                    {isMissing ? (
+                      <CancelIcon sx={{ color: '#E53935', fontSize: 14 }} />
+                    ) : (
+                      <CheckCircleIcon sx={{ color: '#43A047', fontSize: 14 }} />
+                    )}
                   </span>
+
                   {ingredient}
-                  {isMissing && (
-                    <small>Faltando</small>
-                  )}
+
+                  {isMissing && <small>Faltando</small>}
                 </li>
               )
             })}
