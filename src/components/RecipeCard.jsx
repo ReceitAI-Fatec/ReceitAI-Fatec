@@ -3,9 +3,6 @@ import './RecipeCard.css'
 // ************ TESTE ICONE *****************
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import AccessAlarmSharpIcon from '@mui/icons-material/AccessAlarmSharp';
-import RestaurantMenuSharpIcon from '@mui/icons-material/RestaurantMenuSharp';
-
 
 function RecipeCard({ recipe, onSelect }) {
   return (
