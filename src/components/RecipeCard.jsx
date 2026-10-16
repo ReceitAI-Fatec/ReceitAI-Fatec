@@ -26,9 +26,16 @@ function RecipeCard({ recipe, onSelect }) {
           {recipe.description}
         </p>
 
-        <div className="recipe-info">
-          <span>◷ {recipe.preparationTime} min</span>
+        {/* <div className="recipe-info">
+          <span>◷  {recipe.preparationTime} min</span>
           <span>♧ {recipe.servings} porção(ões)</span>
+        </div>
+         */}
+
+        {/* *************** TESTE ICONE ************* */}
+        <div className="recipe-info">
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><AccessAlarmSharpIcon sx={{ color: '#43A047', fontSize: 20 }} /> {recipe.preparationTime} minutos</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><RestaurantMenuSharpIcon sx={{ color: '#43A047', fontSize: 20 }} /> {recipe.servings} porção(ões)</span>
         </div>
 
         <div className="recipe-tags">
@@ -67,11 +74,11 @@ function RecipeCard({ recipe, onSelect }) {
                   key={ingredient}
                   className={isMissing ? 'ingredient-missing' : ''}
                 >
-                  <span aria-hidden="true">
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} aria-hidden="true">
                     {isMissing ? (
-                      <CancelIcon sx={{ color: '#E53935', fontSize: 14 }} />
+                      <CancelIcon sx={{ color: '#E53935', fontSize: 15 }} />
                     ) : (
-                      <CheckCircleIcon sx={{ color: '#43A047', fontSize: 14 }} />
+                      <CheckCircleIcon sx={{ color: '#43A047', fontSize: 15 }} />
                     )}
                   </span>
 
@@ -81,6 +88,7 @@ function RecipeCard({ recipe, onSelect }) {
                 </li>
               )
             })}
+
           </ul>
         </div>
       </div>
