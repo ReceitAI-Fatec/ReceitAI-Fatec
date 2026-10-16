@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 
 import IngredientSelect from './components/IngredientSelect'
@@ -9,7 +8,6 @@ import AppNavigation from './components/AppNavigation'
 import RecipeDetails from './pages/RecipeDetails'
 import AppHeader from './components/AppHeader'
 import './App.css'
-
 
 // ********************BOTAO TESTE*******************************//
 
@@ -24,7 +22,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 function App() {
   const [selectedIngredients, setSelectedIngredients] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState([])
   const [maxPreparationTime, setMaxPreparationTime] = useState('')
   const [selectedDiets, setSelectedDiets] = useState([])
   const [activeTab, setActiveTab] = useState('pantry')
@@ -56,7 +54,8 @@ function App() {
 
   const filteredRecipes = recipesWithCompatibility.filter((recipe) => {
     const matchesCategory =
-      !selectedCategory || recipe.category === selectedCategory
+  selectedCategory.length === 0 ||
+  selectedCategory.includes(recipe.category)
 
     const matchesTime =
       !maxPreparationTime ||
@@ -133,12 +132,29 @@ function App() {
                   </div>
 
                   {/* BOTÃO TESTE**********************/}
-                  <Button variant="contained" endIcon={<SendIcon />} onClick={() => setActiveTab('recommendations')} sx={{
-                    borderRadius: '10px', backgroundColor: '#2f6b45e3',
-                    '&:hover': { backgroundColor: '#2F6B45', transform: 'scale(1.05)' }
-                  }}>
-                    Enviar
-                  </Button>
+                  <Button
+  variant="contained"
+  endIcon={<SendIcon />}
+  onClick={() => setActiveTab('recommendations')}
+  fullWidth
+  sx={{
+    mt: 1.5,
+    py: 1.2,
+    borderRadius: '10px',
+    backgroundColor: '#2f6b45',
+    color: '#ffffff',
+    fontSize: '14px',
+    fontWeight: 600,
+    textTransform: 'none',
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: '#27583a',
+      boxShadow: 'none',
+    },
+  }}
+>
+  Encontrar receitas
+</Button>
 
 
                 </section>
