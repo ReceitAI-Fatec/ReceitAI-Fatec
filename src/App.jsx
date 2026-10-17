@@ -54,8 +54,8 @@ function App() {
 
   const filteredRecipes = recipesWithCompatibility.filter((recipe) => {
     const matchesCategory =
-  selectedCategory.length === 0 ||
-  selectedCategory.includes(recipe.category)
+      selectedCategory.length === 0 ||
+      selectedCategory.includes(recipe.category)
 
     const matchesTime =
       !maxPreparationTime ||
@@ -133,28 +133,28 @@ function App() {
 
                   {/* BOTÃO TESTE**********************/}
                   <Button
-  variant="contained"
-  endIcon={<SendIcon />}
-  onClick={() => setActiveTab('recommendations')}
-  fullWidth
-  sx={{
-    mt: 1.5,
-    py: 1.2,
-    borderRadius: '10px',
-    backgroundColor: '#2f6b45',
-    color: '#ffffff',
-    fontSize: '14px',
-    fontWeight: 600,
-    textTransform: 'none',
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: '#27583a',
-      boxShadow: 'none',
-    },
-  }}
->
-  Encontrar receitas
-</Button>
+                    variant="contained"
+                    endIcon={<SendIcon />}
+                    onClick={() => setActiveTab('recommendations')}
+                    fullWidth
+                    sx={{
+                      mt: 1.5,
+                      py: 1.2,
+                      borderRadius: '10px',
+                      backgroundColor: '#2f6b45',
+                      color: '#ffffff',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      boxShadow: 'none',
+                      '&:hover': {
+                        backgroundColor: '#27583a',
+                        boxShadow: 'none',
+                      },
+                    }}
+                  >
+                    Encontrar receitas
+                  </Button>
 
 
                 </section>
