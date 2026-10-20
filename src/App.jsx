@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Button from '@mui/material/Button'
 
 import IngredientSelect from './components/IngredientSelect'
 import RecipeCard from './components/RecipeCard'
@@ -7,18 +8,8 @@ import RecipeFilters from './components/RecipeFilters'
 import AppNavigation from './components/AppNavigation'
 import RecipeDetails from './pages/RecipeDetails'
 import AppHeader from './components/AppHeader'
+import { ArrowRightIcon } from './components/Icons'
 import './App.css'
-
-// ********************BOTAO TESTE*******************************//
-
-import Button from '@mui/material/Button';
-import Icon from '@mui/material/Icon';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import SaveIcon from '@mui/icons-material/Save';
-import SendIcon from '@mui/icons-material/Send';
-
 
 function App() {
   const [selectedIngredients, setSelectedIngredients] = useState([])
@@ -116,61 +107,55 @@ function App() {
                     onChange={setSelectedIngredients}
                   />
 
-                  <div className="selected-summary">
-                    {selectedIngredients.length === 0 ? (
-                      <p>
-                        Selecione ingredientes para descobrir suas receitas.
-                      </p>
-                    ) : (
-                      <p>
-                        Você selecionou {selectedIngredients.length}{' '}
-                        {selectedIngredients.length === 1
-                          ? 'ingrediente'
-                          : 'ingredientes'}.
-                      </p>
-                    )}
-                  </div>
-
-                  {/* BOTÃO TESTE**********************/}
-                  <Button
-                    variant="contained"
-                    endIcon={<SendIcon />}
-                    onClick={() => setActiveTab('recommendations')}
-                    fullWidth
-                    sx={{
-                      mt: 1.5,
-                      py: 1.2,
-                      borderRadius: '10px',
-                      backgroundColor: '#2f6b45',
-                      color: '#ffffff',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      boxShadow: 'none',
-                      '&:hover': {
-                        backgroundColor: '#27583a',
+                  <div className="search-actions">
+                    <Button
+                      variant="contained"
+                      endIcon={<ArrowRightIcon size={18} />}
+                      onClick={() => setActiveTab('recommendations')}
+                      fullWidth
+                      sx={{
+                        py: 1.2,
+                        borderRadius: '8px',
+                        backgroundColor: '#2f6b45',
+                        color: '#ffffff',
+                        fontFamily: 'inherit',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        textTransform: 'none',
                         boxShadow: 'none',
-                      },
-                    }}
-                  >
-                    Encontrar receitas
-                  </Button>
-
-
+                        '&:hover': {
+                          backgroundColor: '#27583a',
+                          boxShadow: 'none',
+                        },
+                      }}
+                    >
+                      Encontrar receitas
+                    </Button>
+                  </div>
                 </section>
 
-                <section className="pantry-filters">
-                  <RecipeFilters
-                    selectedCategory={selectedCategory}
-                    onCategoryChange={setSelectedCategory}
-                    maxPreparationTime={maxPreparationTime}
-                    onPreparationTimeChange={setMaxPreparationTime}
-                    selectedDiets={selectedDiets}
-                    onDietChange={setSelectedDiets}
-                  />
+                <div className="pantry-aside">
+                  <section className="pantry-filters">
+                    <RecipeFilters
+                      selectedCategory={selectedCategory}
+                      onCategoryChange={setSelectedCategory}
+                      maxPreparationTime={maxPreparationTime}
+                      onPreparationTimeChange={setMaxPreparationTime}
+                      selectedDiets={selectedDiets}
+                      onDietChange={setSelectedDiets}
+                    />
+                  </section>
 
-
-                </section>
+                  <div className="pantry-tip">
+                    <strong>
+                      Mais ingredientes em casa, maior compatibilidade.
+                    </strong>
+                    <p>
+                      O percentual compara a quantidade de ingredientes que
+                      você tem com o total da receita.
+                    </p>
+                  </div>
+                </div>
               </div>
             </>
           )}
@@ -204,3 +189,4 @@ function App() {
 }
 
 export default App
+

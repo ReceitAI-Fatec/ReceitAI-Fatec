@@ -1,5 +1,5 @@
-/* Código antigo
 import './RecipeFilters.css'
+import { CheckIcon } from './Icons'
 
 const categories = [
   'Café da manhã',
@@ -16,124 +16,16 @@ const diets = [
   'Zero açúcar',
 ]
 
-function RecipeFilters({
-  selectedCategory,
-  onCategoryChange,
-  maxPreparationTime,
-  onPreparationTimeChange,
-  selectedDiets,
-  onDietChange,
-}) {
-  function toggleDiet(diet) {
-    if (selectedDiets.includes(diet)) {
-      onDietChange(selectedDiets.filter((item) => item !== diet))
-    } else {
-      onDietChange([...selectedDiets, diet])
-    }
-  }
-
-  return (
-    <section className="filters-section">
-      <div className="filters-heading">
-        <h3>Filtrar receitas</h3>
-        <button
-          type="button"
-          className="clear-filters-button"
-          onClick={() => {
-            onCategoryChange('')
-            onPreparationTimeChange('')
-            onDietChange([])
-          }}
-        >
-          Limpar filtros
-        </button>
-      </div>
-
-      <div className="filters-grid">
-        <div className="filter-group">
-          <span className="filter-label">Tipo de refeição</span>
-
-          <div className="filter-options">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                className={`filter-chip ${
-                  selectedCategory === category ? 'selected' : ''
-                }`}
-                aria-pressed={selectedCategory === category}
-                onClick={() =>
-                  onCategoryChange(
-                    selectedCategory === category ? '' : category,
-                  )
-                }
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="time-filter">Tempo de preparo</label>
-
-          <select
-            id="time-filter"
-            value={maxPreparationTime}
-            onChange={(event) =>
-              onPreparationTimeChange(event.target.value)
-            }
-          >
-            <option value="">Qualquer duração</option>
-            <option value="15">Até 15 minutos</option>
-            <option value="30">Até 30 minutos</option>
-            <option value="60">Até 60 minutos</option>
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <span className="filter-label">Restrições alimentares</span>
-
-          <div className="filter-options">
-            {diets.map((diet) => (
-              <button
-                key={diet}
-                type="button"
-                className={`filter-chip ${
-                  selectedDiets.includes(diet) ? 'selected' : ''
-                }`}
-                aria-pressed={selectedDiets.includes(diet)}
-                onClick={() => toggleDiet(diet)}
-              >
-                {diet}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
+// O Figma mostra os rótulos com cada palavra em maiúscula ("Café da Manhã").
+// Só o texto exibido muda; os valores usados nos filtros continuam iguais.
+function formatLabel(text) {
+  return text
+    .split(' ')
+    .map((word) =>
+      word === 'da' ? word : word.charAt(0).toUpperCase() + word.slice(1),
+    )
+    .join(' ')
 }
-
-export default RecipeFilters*/
-
-
-import './RecipeFilters.css'
-
-const categories = [
-  'Café da manhã',
-  'Almoço',
-  'Jantar',
-  'Lanche',
-]
-
-const diets = [
-  'Vegano',
-  'Vegetariano',
-  'Sem glúten',
-  'Sem lactose',
-  'Zero açúcar',
-]
 
 function RecipeFilters({
   selectedCategory,
@@ -164,7 +56,7 @@ function RecipeFilters({
   return (
     <section className="filters-section">
       <div className="filters-heading">
-        <h3>Filtrar receitas</h3>
+        <h3>Do seu jeito</h3>
 
         <button
           type="button"
@@ -179,24 +71,31 @@ function RecipeFilters({
         </button>
       </div>
 
+      <p className="filters-description">
+        Combine refeição, tempo e preferências.
+      </p>
+
       <div className="filters-grid">
         <div className="filter-group">
           <span className="filter-label">Tipo de refeição</span>
 
           <div className="filter-options">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                className={`filter-chip ${
-                  selectedCategory.includes(category) ? 'selected' : ''
-                }`}
-                aria-pressed={selectedCategory.includes(category)}
-                onClick={() => toggleCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
+            {categories.map((category) => {
+              const isSelected = selectedCategory.includes(category)
+
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  className={`filter-chip ${isSelected ? 'selected' : ''}`}
+                  aria-pressed={isSelected}
+                  onClick={() => toggleCategory(category)}
+                >
+                  {isSelected && <CheckIcon size={12} />}
+                  {formatLabel(category)}
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -221,22 +120,30 @@ function RecipeFilters({
           <span className="filter-label">Restrições alimentares</span>
 
           <div className="filter-options">
-            {diets.map((diet) => (
-              <button
-                key={diet}
-                type="button"
-                className={`filter-chip ${
-                  selectedDiets.includes(diet) ? 'selected' : ''
-                }`}
-                aria-pressed={selectedDiets.includes(diet)}
-                onClick={() => toggleDiet(diet)}
-              >
-                {diet}
-              </button>
-            ))}
+            {diets.map((diet) => {
+              const isSelected = selectedDiets.includes(diet)
+
+              return (
+                <button
+                  key={diet}
+                  type="button"
+                  className={`filter-chip ${isSelected ? 'selected' : ''}`}
+                  aria-pressed={isSelected}
+                  onClick={() => toggleDiet(diet)}
+                >
+                  {isSelected && <CheckIcon size={12} />}
+                  {formatLabel(diet)}
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>
+
+      <p className="filters-note">
+        As opções selecionadas são aplicadas juntas. Confira os rótulos dos
+        produtos e adapte às suas necessidades.
+      </p>
     </section>
   )
 }
