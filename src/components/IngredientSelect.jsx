@@ -14,6 +14,10 @@ const ingredients = [
   { value: 'macarrao', label: 'Macarrão' },
   { value: 'queijo', label: 'Queijo' },
   { value: 'leite', label: 'Leite' },
+  { value: 'alface', label: 'Alface' },
+  { value: 'Limão', label: 'Limão' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'aveia', label: 'Aveia' },
 ]
 
 // Ignora acentos e maiúsculas: "feij" encontra "Feijão"
