@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReceitAI</title>
+<style>
+ body{font-family:system-ui,sans-serif;background:#faf7f2;color:#2b2b2b;max-width:680px;margin:0 auto;padding:24px}
+ h1{margin:0 0 4px} p.sub{margin:0 0 20px;color:#777}
+ input{width:100%;box-sizing:border-box;padding:12px;font-size:16px;border:1px solid #ccc;border-radius:8px}
+ button{margin-top:10px;padding:12px 20px;font-size:16px;border:0;border-radius:8px;background:#e4572e;color:#fff;cursor:pointer}
+ button:disabled{opacity:.6;cursor:wait}
+ #status{margin:14px 0;color:#777}
+ .card{background:#fff;border-radius:12px;padding:18px 22px;box-shadow:0 1px 6px #0001}
+ .card h2{margin-top:0} li{margin:6px 0}
+</style></head><body>
+<h1>🍳 ReceitAI</h1>
+<p class="sub">Digite os ingredientes que você tem, separados por vírgula.</p>
+<input id="ing" value="arroz, ovo, cebola" placeholder="ex.: frango, batata, alho">
+<button id="go">Gerar receita</button>
+<div id="status"></div>
+<div id="out"></div>
+<script>
+const $=id=>document.getElementById(id);
+$("go").onclick=async()=>{
+  const ing=$("ing").value.split(",").map(s=>s.trim()).filter(Boolean);
+  if(!ing.length) return;
+  $("go").disabled=true; $("out").innerHTML="";
+  const t0=Date.now();
+  const tick=setInterval(()=>$("status").textContent="Pensando... "+Math.round((Date.now()-t0)/1000)+"s",500);
+  try{
+    const r=await fetch("/receitas/texto",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ingredientes:ing,restricoes:[]})});
+    const d=await r.json();
+    const li=a=>(a||[]).map(x=>"<li>"+x+"</li>").join("");
+    $("out").innerHTML=d.nome?`<div class="card"><h2>${d.nome}</h2>
+      <p>⏱ ${d.tempo_minutos||"?"} min</p><h3>Ingredientes</h3><ul>${li(d.ingredientes)}</ul>
+      <h3>Modo de preparo</h3><ol>${li(d.modo_preparo)}</ol></div>`
+      :`<div class="card"><pre>${JSON.stringify(d,null,2)}</pre></div>`;
+    $("status").textContent="Pronto em "+Math.round((Date.now()-t0)/1000)+"s";
+  }catch(e){ $("status").textContent="Erro: "+e; }
+  clearInterval(tick); $("go").disabled=false;
+};
+</script></body></html>

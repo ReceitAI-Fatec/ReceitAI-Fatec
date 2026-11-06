@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReceitAI - Comparar modelos</title>
+<style>
+ body{font-family:system-ui,sans-serif;background:#faf7f2;color:#2b2b2b;max-width:900px;margin:0 auto;padding:24px}
+ h1{margin:0 0 4px} p.sub{margin:0 0 20px;color:#777}
+ input[type=text]{width:100%;box-sizing:border-box;padding:12px;font-size:16px;border:1px solid #ccc;border-radius:8px}
+ #mods{margin:12px 0} #mods label{margin-right:18px;font-size:15px}
+ button{padding:12px 20px;font-size:16px;border:0;border-radius:8px;background:#e4572e;color:#fff;cursor:pointer}
+ button:disabled{opacity:.6;cursor:wait}
+ #out{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;margin-top:18px}
+ .card{background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 6px #0001}
+ .tag{display:inline-block;background:#2b2b2b;color:#fff;border-radius:6px;padding:2px 8px;font-size:13px}
+ .tempo{float:right;color:#777;font-size:14px} li{margin:5px 0}
+</style></head><body>
+<h1>⚖️ ReceitAI — comparar modelos</h1>
+<p class="sub">Mesmos ingredientes, cada modelo em sequência, com o tempo de cada um.</p>
+<input type="text" id="ing" value="arroz, ovo, cebola">
+<div id="mods">Carregando modelos...</div>
+<button id="go">Comparar</button>
+<div id="out"></div>
+<script>
+const $=id=>document.getElementById(id);
+(async()=>{
+  try{
+    const h=await (await fetch("/health")).json();
+    const ms=(h.modelos||[]).filter(m=>!m.startsWith("llava"));
+    $("mods").innerHTML=ms.map(m=>`<label><input type="checkbox" value="${m}" checked> ${m}</label>`).join("");
+  }catch(e){ $("mods").textContent="Erro ao listar modelos: "+e; }
+})();
+const li=a=>(a||[]).map(x=>"<li>"+x+"</li>").join("");
+$("go").onclick=async()=>{
+  const ing=$("ing").value.split(",").map(s=>s.trim()).filter(Boolean);
+  const sel=[...document.querySelectorAll("#mods input:checked")].map(x=>x.value);
+  if(!ing.length||!sel.length) return;
+  $("go").disabled=true; $("out").innerHTML="";
+  for(const m of sel){
+    const card=document.createElement("div"); card.className="card";
+    card.innerHTML=`<span class="tag">${m}</span><span class="tempo">...</span><p>Gerando...</p>`;
+    $("out").appendChild(card);
+    const t0=Date.now();
+    const tick=setInterval(()=>card.querySelector(".tempo").textContent=Math.round((Date.now()-t0)/1000)+"s",500);
+    try{
+      const r=await fetch("/receitas/texto",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ingredientes:ing,restricoes:[],modelo:m})});
+      const d=await r.json();
+      clearInterval(tick);
+      const seg=Math.round((Date.now()-t0)/1000);
+      card.innerHTML=`<span class="tag">${m}</span><span class="tempo">${seg}s</span>`+(d.nome
+        ?`<h2>${d.nome}</h2><p>⏱ ${d.tempo_minutos||"?"} min</p><h3>Ingredientes</h3><ul>${li(d.ingredientes)}</ul><h3>Preparo</h3><ol>${li(d.modo_preparo)}</ol>`
+        :`<pre style="white-space:pre-wrap">${JSON.stringify(d,null,2)}</pre>`);
+    }catch(e){ clearInterval(tick); card.innerHTML+=`<p>Erro: ${e}</p>`; }
+  }
+  $("go").disabled=false;
+};
+</script></body></html>
